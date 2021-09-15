@@ -1,3 +1,6 @@
+"""project: creating a model that predicts the accuracy of images using
+machine learning (tensorflow). this project uses tensorflow's sample data set."""
+
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -38,6 +41,20 @@ model = keras.Sequential([
 model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 model.fit(train_images, train_labels, epochs=5) #epoch - decides how many times you see an image
 
-test_loss, test_acc = model.evaluate(test_images, test_labels)
-print("Tested Acc:", test_acc)
+#train the model
+prediction = model.predict(test_images) #gives predictions by passing in a bunch of items
+
+#get the largest value and find the index, returning the highest predicted percentage
+#get the name of the item by passing it into class_names
+#this sets up a way to see the images of what it actually is vs the prediction 
+for i in range(5):
+    plt.grid(False)
+    plt.imshow(test_images[i], cmap=plt.cm.binary)
+    plt.xlabel("Actual: " + class_names[test_labels[i]]) 
+    plt.title("Prediction" + class_names[np.argmax(prediction[i])])
+    plt.show()
+
+
+
+
 
