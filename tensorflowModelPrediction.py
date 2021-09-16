@@ -1,6 +1,6 @@
 """project: creating a model that predicts the accuracy of images using
 machine learning (tensorflow). this project uses tensorflow's sample data set/
-tensorflow keras, as high level API to build and train models in tensorflow."""
+tensorflow keras, as a high level API to build and train models in tensorflow."""
 
 import tensorflow as tf
 from tensorflow import keras
