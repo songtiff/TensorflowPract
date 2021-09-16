@@ -1,4 +1,4 @@
-# Tensorflow Practice
+# Tensorflow 
 
 ### Description
 The Tensorflow Model Prediction creates a model that predicts the accuracy of images using
