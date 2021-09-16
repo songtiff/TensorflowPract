@@ -61,5 +61,34 @@ y_train = train_labels[10000:]
 #fit model
 fitModel = model.fit(x_train, y_train, epochs=40, batch_size=512, validation_data=(x_val, y_val), verbose=1)
 results = model.evaluate(test_data, test_labels)
-
 print(results)
+
+model.save("model.h5") #h5 is an extension for saving model in keras tf
+
+#looks up mapping for all words and returns an encoded list
+def review_encode(s):
+    encoded = [1] #<START> = 1, setting a starting tag
+
+    for word in s: 
+        if word.lower() in word_index:
+            encoded.append(word_index[word.lower()])
+        else:
+            encoded.append(2)
+    return encoded
+
+model = keras.models.load_model("model.h5")
+
+#load in outside sample data file
+with open("testmodel.txt", encoding="utf-8") as f:
+    for line in f.readlines(): 
+        nline = line.replace(",", "").replace(".", "").replace("(", "").replace(")", "").replace(":", "").replace("\"", "").strip().split(" ")
+        encode = review_encode(nline)
+        encode = keras.preprocessing.sequence.pad_sequences([encode], value=word_index["<PAD>"], padding="post", maxlen=250)
+        predict = model.predict(encode)
+        print(line) #original text
+        print(encode) #encoded review
+        print(predict[0]) #whether the model thinks the review is negative or positive
+
+
+
+
