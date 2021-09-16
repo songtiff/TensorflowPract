@@ -1,4 +1,6 @@
-"""project: """
+"""project: Text classification that decodes integers pointing to words 
+to words pointing to integers and determines whether the review is 
+good or bad with a limit of 250 words max in a review."""
 
 import tensorflow as tf
 from tensorflow import keras 
@@ -12,9 +14,10 @@ data = keras.datasets.imdb
 
 #since this dataset contains a bunch of words, we want the 10000th most frequent words
 #prints out integer encoded words - each integer stands for a word
-(train_data, train_labels), (test_data, test_labels) = data.load_data(num_words=10000) 
+(train_data, train_labels), (test_data, test_labels) = data.load_data(num_words=88000) 
 
 word_index = data.get_word_index() #gives us a tuple
+
 word_index = {k : (v + 3) for k, v in word_index.items()} #break the tuple into key and value pairings k = word, v = integer
 
 #allows personal value assigning
@@ -38,9 +41,25 @@ def decode_review(text):
 #final output expectation : whether the review is good or bad
 #neuron output will be either 0 or 1 to give us a probability where a review is a certain percentage either 0 or 1
 model = keras.Sequential()
-model.add(keras.layers.Embedding(10000, 16))
+model.add(keras.layers.Embedding(88000, 16)) #groups words in a similar way
 model.add(keras.layers.GlobalAveragePooling1D())
 model.add(keras.layers.Dense(16, activation="relu"))
 model.add(keras.layers.Dense(1, activation="sigmoid"))
 
 model.summary()
+
+#define mode
+model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
+
+#check how well model is working
+x_val = train_data[:10000] #just get 10000 instead of 25000 entries 
+x_train = train_data[10000:]
+
+y_val = train_labels[:10000] 
+y_train = train_labels[10000:]
+
+#fit model
+fitModel = model.fit(x_train, y_train, epochs=40, batch_size=512, validation_data=(x_val, y_val), verbose=1)
+results = model.evaluate(test_data, test_labels)
+
+print(results)
