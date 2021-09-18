@@ -104,6 +104,22 @@ for i in range(num_images):
 plt.tight_layout()
 plt.show()
 
+#grabbing an image from the dataset to make a prediction on
+img = test_images[1]
+img = (np.expand_dims(img, 0)) #tf.keras models make predictions on a batch/collection
+print(img.shape)
+
+#predict correct label for this image
+predictions_single = model.predict(img)
+print(predictions_single)
+
+plot_value_array(1, predictions_single[0], test_labels)
+_ = plt.xticks(range(10), class_names, rotation = 45)
+plt.show()
+
+
+
+
 
 
 
