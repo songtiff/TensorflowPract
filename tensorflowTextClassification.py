@@ -27,7 +27,7 @@ word_index["<UNK>"] = 2
 word_index["<UNUSED>"] = 3
 
 #swap values in the keys
-#we currently have words pointing to integers, but we reverse to get the words pointing to the integers
+#we currently have integer pointing to words, but we reverse to get the words pointing to the integers
 reverse_word_index = dict([(value, key) for (key, value) in word_index.items()]) 
 
 #redefine testing data 
