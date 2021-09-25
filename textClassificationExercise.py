@@ -110,3 +110,29 @@ print("Vectorized review ", vectorize_text(first_review, first_label))
 print("1287 ", vectorize_layer.get_vocabulary()[1287])
 print("313 ", vectorize_layer.get_vocabulary()[313])
 print('Vocabulary size: {}'.format(len(vectorize_layer.get_vocabulary())))
+
+#apply TextVectorization to train, validation, and test dataset
+train_ds = raw_train_ds.map(vectorize_text)
+val_ds = raw_val_ds.map(vectorize_text)
+test_ds = raw_test_ds.map(vectorize_text)
+
+#configure dataset for performance
+#ensure data does not bottleneck
+AUTOTUNE = tf.data.AUTOTUNE
+
+train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+val_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
+#create model/neural network
+embedding_dim = 16
+
+model = tf.keras.Sequential([
+    layers.Embedding(max_features+1, embedding_dim),
+    layers.Dropout(0.2),
+    layers.GlobalAveragePooling1D(),
+    layers.Dropout(0.2),
+    layers.Dense(1)
+])
+
+model.summary()
