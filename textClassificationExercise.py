@@ -136,3 +136,16 @@ model = tf.keras.Sequential([
 ])
 
 model.summary()
+
+#loss function and optimizer
+model.compile(loss=losses.BinaryCrossentropy(from_logits=True), optimizer='adam', metrics=tf.metrics.BinaryAccuracy(threshold=0.0))
+
+#train model    
+history = model.fit(train_ds, validation_data=val_ds, epochs=10)
+
+#evaluate model
+loss, accuracy = model.evaluate(test_ds)
+print("Loss: ", loss)
+print("Accuracy: ", accuracy)
+
+#plot of accuracy and loss over time
