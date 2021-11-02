@@ -190,3 +190,12 @@ export_model.compile(
 
 loss, accuracy = export_model.evaluate(raw_test_ds)
 print(accuracy)
+
+#inference on new data
+examples = [
+    "The movie was great!",
+    "The movie was okay.",
+    "The movie was terrible..."
+]
+
+export_model.predict(examples)

@@ -1,0 +1,34 @@
+#predict fuel efficiency 
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+#make numpy printouts easier to read
+np.set_printoptions(precision=3, suppress=True)
+
+import tensorflow as tf
+from tensorflow import keras 
+from tensorflow.keras import layers
+
+#get data and import using pandas
+url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data'
+column_names = ['MPG', 'Cylinders', 'Displacement', 'Horsepower', 'Weight',
+                'Acceleration', 'Model Year', 'Origin']
+
+raw_dataset = pd.read_csv(url, names=column_names,
+                            na_values='?', comment='\t',
+                            sep=' ', skipinitialspace=True)
+
+dataset = raw_dataset.copy()
+print(dataset.tail())
+
+#clean dataset
+print(dataset.isna().sum())
+dataset = dataset.dropna()
+
+#one-hot encode the values in origin column because it is categorical 
+dataset['Origin'] = dataset['Origin'].map({1: 'USA', 2: 'Europe', 3: 'Japan'})
+dataset = pd.get_dummies(dataset, columns=['Origin'], prefix='', prefix_sep='')
+print(dataset.tail)
