@@ -6,8 +6,10 @@ machine learning (via Tensorflow). This project uses Tensorflow's sample data se
 
 We get back the determined accuracy of the prediction, as well as the 'predicted' result and the 'actual' result.
 
-The Tensorflow Text Classification Text decodes from integers pointing to words 
+The Tensorflow Text Classification decodes from integers pointing to words 
 to words pointing to integers and determines whether the review is good or bad with a limit of 250 words max in a review.
 
 Output results in the original text, encoded review, and a numerical value below whether the model thinks the review is positive or negative.
+
+The Tensorflow Regression model aims to predict the output of a continuous value using the Auto MPG dataset from UCI.
 
