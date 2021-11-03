@@ -1,5 +1,6 @@
 #predict fuel efficiency 
 
+from datetime import time
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -66,3 +67,48 @@ with np.printoptions(precision=2, suppress=True):
     print('First example: ', first)
     print()
     print('Normalized: ', normalizer(first).numpy())
+
+#linear regression
+#predict MPG from horsepower 
+horsepower = np.array(train_features['Horsepower'])
+
+horsepower_normalizer = layers.Normalization(input_shape=[1,], axis=None)
+horsepower_normalizer.adapt(horsepower)
+
+#keras sequential model, define model architecture 
+horsepower_model = tf.keras.Sequential([
+    horsepower_normalizer,
+    layers.Dense(units=1)
+])
+
+horsepower_model.summary()
+print(horsepower_model.predict(horsepower[:10]))
+horsepower_model.compile(
+    optimizer = tf.optimizers.Adam(learning_rate=0.1),
+    loss='mean_absolute_error'
+)
+
+history = horsepower_model.fit(
+    train_features['Horsepower'],
+    train_labels,
+    epochs=100,
+    #suppress logging
+    verbose=0,
+    #calculate validation results on 20% of the training data
+    validation_split = 0.2
+)
+
+hist = pd.DataFrame(history.history)
+hist['epoch'] = history.epoch
+print(hist.tail())
+
+def plot_loss(history):
+    plt.plot(history.history['loss'], label='loss')
+    plt.plot(history.history['val_loss'], label='val_loss')
+    plt.ylim([0, 10])
+    plt.xlabel('Epoch')
+    plt.ylabel('Error[MPG]')
+    plt.legend()
+    plt.grid(True)
+
+plot_loss(history)
