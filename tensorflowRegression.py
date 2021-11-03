@@ -6,6 +6,9 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #gpu
+
 #make numpy printouts easier to read
 np.set_printoptions(precision=3, suppress=True)
 
@@ -98,6 +101,7 @@ history = horsepower_model.fit(
     validation_split = 0.2
 )
 
+#visualize on plot
 hist = pd.DataFrame(history.history)
 hist['epoch'] = history.epoch
 print(hist.tail())
@@ -110,5 +114,23 @@ def plot_loss(history):
     plt.ylabel('Error[MPG]')
     plt.legend()
     plt.grid(True)
-
 plot_loss(history)
+
+#collect results for later
+test_results = {}
+
+test_results['horsepower_model'] = horsepower_model.evaluate(
+    test_features['Horsepower'],
+    test_labels, verbose=0
+)
+
+x = tf.linspace(0.0, 250, 251)
+y = horsepower_model.predict(x)
+
+def plot_horsepower(x, y):
+  plt.scatter(train_features['Horsepower'], train_labels, label='Data')
+  plt.plot(x, y, color='k', label='Predictions')
+  plt.xlabel('Horsepower')
+  plt.ylabel('MPG')
+  plt.legend()
+  return plot_horsepower(x,y)
